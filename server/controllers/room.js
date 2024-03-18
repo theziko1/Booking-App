@@ -1,15 +1,24 @@
+import Hotel from "../models/Hotel.js";
 import Room from "../models/Room.js"
 
 
 // Create a Room
-export const AddRoom = async (req,res) => {
-    const newRoom = new Room(req.body)
+export const AddRoom = async (req,res,next) => {
+    const hotelId = req.params.hotelid;
+    const newRoom = new Room(req.body);
     try {
-        const savedRoom = await newRoom.save()
-        res.status(201).json(savedRoom)
-    } catch (error) {
-        res.status(500).json(error)
-    } 
+        const savedRoom = await newRoom.save();
+        try {
+          await Hotel.findByIdAndUpdate(hotelId, {
+            $push: { rooms: savedRoom._id },
+          });
+        } catch (err) {
+          next(err);
+        }
+        res.status(200).json(savedRoom);
+      } catch (err) {
+        next(err);
+      } 
 }
 
 // Update a Room
@@ -17,6 +26,7 @@ export const UpdateRoom = async (req,res) => {
    
     try {
         const UpdatedRoom = await Room.findByIdAndUpdate(req.params.id,{$set : req.body},{new:true})
+        
         res.status(201).json(UpdatedRoom)
     } catch (error) {
         res.status(500).json(error)
@@ -24,10 +34,17 @@ export const UpdateRoom = async (req,res) => {
 }
 
 // Delete a Room
-export const DeleteRoom = async (req,res) => {
-   
+export const DeleteRoom = async (req,res,next) => {
+    const hotelId = req.params.hotelid;
     try {
         await Room.findByIdAndDelete(req.params.id)
+        try {
+          await Hotel.findByIdAndUpdate(hotelId, {
+            $pull: { rooms: req.params.id },
+          });
+        } catch (err) {
+          next(err);
+        }
         res.status(201).json("Room has been deleted")
     } catch (error) {
         res.status(500).json(error)
