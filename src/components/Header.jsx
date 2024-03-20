@@ -70,12 +70,12 @@ const Header = ({type}) => {
                 <div className="text-gray-300 flex items-center gap-2">
                 <FaCalendarDays className="inline" />
                 <span onClick={()=> setOpen(!open)} className="cursor-pointer">{`${format(date[0].startDate,"dd-MM-yyyy")} to ${format(date[0].endDate,"dd-MM-yyyy")}`}</span>
-                {open && <DateRange editableDateInputs={true} onChange={item => setDate([item.selection])} moveRangeOnFirstSelection={false} ranges={date} className="absolute top-10"/>}
+                {open && <DateRange editableDateInputs={true} onChange={item => setDate([item.selection])} moveRangeOnFirstSelection={false} ranges={date} className="absolute top-10 z-20"/>}
                 </div>
                 <div className="text-gray-300 flex items-center gap-2">
                 <FaPerson className="inline" />
                 <span onClick={()=> setOpenOpt(!openOpt)} className="cursor-pointer">{`${opt.adult} adult . ${opt.children} children . ${opt.room} room`}</span>
-                    { openOpt && <div className="absolute top-12 bg-white text-gray-500 rounded shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
+                    { openOpt && <div className="absolute top-12 bg-white text-gray-500 rounded shadow-[0_3px_10px_rgb(0,0,0,0.2)] z-20">
                        <div className="w-[200px] flex justify-between m-2">
                         <span>Adult</span>
                             <div className="flex items-center gap-2 text-black">
