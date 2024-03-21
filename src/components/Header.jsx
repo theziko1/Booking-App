@@ -7,8 +7,10 @@ import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { format } from "date-fns"
+import { useNavigate } from 'react-router-dom';
 
 const Header = ({type}) => {
+    const [destination, setDestination] = useState("");
     const [open , setOpen] = useState(false)
     const [date, setDate] = useState([
         {
@@ -32,6 +34,12 @@ const Header = ({type}) => {
           };
         });
       };
+
+      const navigate = useNavigate()
+
+      const handleSearch = () => {
+         navigate("/hotels",{state :{ destination,date,opt}})
+      }
 
   return (
     <div className="bg-[#003580] text-white flex justify-center relative">
@@ -65,12 +73,12 @@ const Header = ({type}) => {
             <div className="h-[50px] bg-white border-4 border-yellow-300 flex items-center justify-around -bottom-5 absolute py-3 px-0 rounded w-full max-w-[1024px]">
                 <div className="text-gray-300 flex items-center gap-2">
                 <FaBed className="inline"/>
-                <input type="text" placeholder="Where are you going ?" className="border-none outline-none"/>
+                <input type="text" placeholder="Where are you going ?" onChange={(e) => setDestination(e.target.value)} className="border-none outline-none"/>
                 </div>
                 <div className="text-gray-300 flex items-center gap-2">
                 <FaCalendarDays className="inline" />
                 <span onClick={()=> setOpen(!open)} className="cursor-pointer">{`${format(date[0].startDate,"dd-MM-yyyy")} to ${format(date[0].endDate,"dd-MM-yyyy")}`}</span>
-                {open && <DateRange editableDateInputs={true} onChange={item => setDate([item.selection])} moveRangeOnFirstSelection={false} ranges={date} className="absolute top-10 z-20"/>}
+                {open && <DateRange editableDateInputs={true} onChange={item => setDate([item.selection])} moveRangeOnFirstSelection={false} minDate={new Date()} ranges={date} className="absolute top-10 z-20"/>}
                 </div>
                 <div className="text-gray-300 flex items-center gap-2">
                 <FaPerson className="inline" />
@@ -104,7 +112,7 @@ const Header = ({type}) => {
                     </div>}
                 </div>
                 <div className="">
-                <button className="bg-[#0071c2] p-2 rounded px-4">Search</button>
+                <button className="bg-[#0071c2] p-2 rounded px-4" onClick={handleSearch}>Search</button>
                 </div>
             </div></>}
         </div>
