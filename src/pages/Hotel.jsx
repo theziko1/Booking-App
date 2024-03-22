@@ -5,6 +5,7 @@ import { FaCircleArrowLeft, FaCircleArrowRight, FaCircleXmark, FaLocationDot } f
 import MailList from '../components/MailList'
 import Footer from '../components/Footer'
 
+
 const Hotel = () => {
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
