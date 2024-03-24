@@ -1,69 +1,31 @@
 import React from 'react'
+import useFetch from '../hooks/useFetch'
 
 const FeaturedProperties = () => {
+    const {data,loading,error} = useFetch("http://localhost:8080/api/hotels?featured=true")
   return (
     <>
     <div className=" w-full max-w-[1024px] flex justify-center gap-5">
-      <div className="flex-1 gap-2 flex flex-col">
-            <img className="w-full" src="https://placehold.co/200x200/png" alt="" />
-            <span className="font-bold">Hotel 1</span>
-            <span className="font-light">Casablanca</span>
-            <span className="font-medium">Starting from 300 MAD</span>
-            <div className="relative">
+        { loading ? "Loading ... ": (
+            <>
+            {data.map((item) => (
+             <div className="flex-1 gap-2 flex flex-col" key={item._id}>
+            <img className="w-full" src={item.photos[0]} alt="" />
+            <span className="font-bold">{item.name}</span>
+            <span className="font-light">{item.city}</span>
+            <span className="font-medium">Starting from {item.cheapestPrice} MAD</span>
+            {item.rating &&<div className="relative">
                 <span className="text-yellow-400 text-4xl relative">★</span>
-                <span className="absolute top-[18px] left-2.5 text-[8px] font-semibold">3.5</span>
+                <span className="absolute top-[18px] left-2.5 text-[8px] font-semibold">{item.rating}</span>
                 <span className="font-bold">Excellent</span>
-
-            </div>
+                
+            </div>}
         </div>
-        <div className="flex-1 gap-2 flex flex-col">
-            <img className="w-full" src="https://placehold.co/200x200/png" alt="" />
-            <span className="font-bold">Hotel 1</span>
-            <span className="font-light">Casablanca</span>
-            <span className="font-medium">Starting from 300 MAD</span>
-            <div className="relative">
-                <span className="text-yellow-400 text-4xl relative">★</span>
-                <span className="absolute top-[18px] left-2.5 text-[8px] font-semibold">3.5</span>
-                <span className="font-bold">Excellent</span>
+            ))}
 
-            </div>
-        </div>
-        <div className="flex-1 gap-2 flex flex-col">
-            <img className="w-full" src="https://placehold.co/200x200/png" alt="" />
-            <span className="font-bold">Hotel 1</span>
-            <span className="font-light">Casablanca</span>
-            <span className="font-medium">Starting from 300 MAD</span>
-            <div className="relative">
-                <span className="text-yellow-400 text-4xl relative">★</span>
-                <span className="absolute top-[18px] left-2.5 text-[8px] font-semibold">3.5</span>
-                <span className="font-bold">Excellent</span>
-
-            </div>
-        </div>
-        <div className="flex-1 gap-2 flex flex-col">
-            <img className="w-full" src="https://placehold.co/200x200/png" alt="" />
-            <span className="font-bold">Hotel 1</span>
-            <span className="font-light">Casablanca</span>
-            <span className="font-medium">Starting from 300 MAD</span>
-            <div className="relative">
-                <span className="text-yellow-400 text-4xl relative">★</span>
-                <span className="absolute top-[18px] left-2.5 text-[8px] font-semibold">3.5</span>
-                <span className="font-bold">Excellent</span>
-
-            </div>
-        </div>
-        <div className="flex-1 gap-2 flex flex-col">
-            <img className="w-full" src="https://placehold.co/200x200/png" alt="" />
-            <span className="font-bold">Hotel 1</span>
-            <span className="font-light">Casablanca</span>
-            <span className="font-medium">Starting from 300 MAD</span>
-            <div className="relative">
-                <span className="text-yellow-400 text-4xl relative">★</span>
-                <span className="absolute top-[18px] left-2.5 text-[8px] font-semibold">3.5</span>
-                <span className="font-bold">Excellent</span>
-
-            </div>
-        </div>
+            </>
+        )}
+     
         
     </div>
     </>
