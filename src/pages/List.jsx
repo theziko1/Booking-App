@@ -10,7 +10,7 @@ import useFetch from '../hooks/useFetch'
 const List = () => {
   const location = useLocation()
   const [destination, setDestination] = useState(location.state.destination);
-  const [date, setDate] = useState(location.state.date);
+  const [dates, setDates] = useState(location.state.dates);
   const [openDate, setOpenDate] = useState(false);
   const [options, setOptions] = useState(location.state.opt);
   const [min, setMin] = useState(undefined);
@@ -35,12 +35,12 @@ const List = () => {
           </div>
           <div className="flex flex-col mb-5 gap-1">
             <label  className="text-xs" htmlFor="">Check-in Date</label>
-            <span onClick={() => setOpenDate(!openDate)} className="h-7 bg-white p-2 flex items-center cursor-pointer">{`${format(date[0].startDate,"dd-MM-yyyy")} to ${format(date[0].endDate,"dd-MM-yyyy")}`}</span>
+            <span onClick={() => setOpenDate(!openDate)} className="h-7 bg-white p-2 flex items-center cursor-pointer">{`${format(dates[0].startDate,"dd-MM-yyyy")} to ${format(dates[0].endDate,"dd-MM-yyyy")}`}</span>
             {openDate && (
                 <DateRange
-                  onChange={(item) => setDate([item.selection])}
+                  onChange={(item) => setDates([item.selection])}
                   minDate={new Date()}
-                  ranges={date}
+                  ranges={dates}
                 />
               )}
           </div>

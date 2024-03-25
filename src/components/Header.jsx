@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { FaBed , FaCarAlt} from "react-icons/fa";
 import { MdFlight } from "react-icons/md";
 import { PiTaxiFill } from "react-icons/pi";
@@ -8,11 +8,12 @@ import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { format } from "date-fns"
 import { useNavigate } from 'react-router-dom';
+import { SearchContext } from '../context/SearchContext.jsx';
 
 const Header = ({type}) => {
     const [destination, setDestination] = useState("");
     const [open , setOpen] = useState(false)
-    const [date, setDate] = useState([
+    const [dates, setDates] = useState([
         {
           startDate: new Date(),
           endDate: new Date(),
@@ -37,8 +38,11 @@ const Header = ({type}) => {
 
       const navigate = useNavigate()
 
+      const {dispatch} = useContext(SearchContext)
+
       const handleSearch = () => {
-         navigate("/hotels",{state :{ destination,date,opt}})
+         dispatch({type: "NEW_SEARCH",payload : {destination,dates,opt}})
+         navigate("/hotels",{state :{ destination,dates,opt}})
       }
 
   return (
@@ -77,8 +81,8 @@ const Header = ({type}) => {
                 </div>
                 <div className="text-gray-300 flex items-center gap-2">
                 <FaCalendarDays className="inline" />
-                <span onClick={()=> setOpen(!open)} className="cursor-pointer">{`${format(date[0].startDate,"dd-MM-yyyy")} to ${format(date[0].endDate,"dd-MM-yyyy")}`}</span>
-                {open && <DateRange editableDateInputs={true} onChange={item => setDate([item.selection])} moveRangeOnFirstSelection={false} minDate={new Date()} ranges={date} className="absolute top-10 z-20"/>}
+                <span onClick={()=> setOpen(!open)} className="cursor-pointer">{`${format(dates[0].startDate,"dd-MM-yyyy")} to ${format(dates[0].endDate,"dd-MM-yyyy")}`}</span>
+                {open && <DateRange editableDateInputs={true} onChange={item => setDates([item.selection])} moveRangeOnFirstSelection={false} minDate={new Date()} ranges={dates} className="absolute top-10 z-20"/>}
                 </div>
                 <div className="text-gray-300 flex items-center gap-2">
                 <FaPerson className="inline" />
