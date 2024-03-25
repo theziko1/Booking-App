@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Header from '../components/Header'
 import { FaCircleArrowLeft, FaCircleArrowRight, FaCircleXmark, FaLocationDot } from "react-icons/fa6";
@@ -6,12 +6,13 @@ import MailList from '../components/MailList'
 import Footer from '../components/Footer'
 import useFetch from '../hooks/useFetch';
 import { useLocation } from 'react-router-dom';
+import { SearchContext } from '../context/SearchContext.jsx';
 
 
 const Hotel = () => {
   const location = useLocation()
   const id = location.pathname.split("/")[2]
-  console.log("🚀 ~ Hotel ~ id:", id)
+  
   
   
   const [slideNumber, setSlideNumber] = useState(0);
@@ -19,7 +20,18 @@ const Hotel = () => {
 
   const {data,loading,error,reFetch} = useFetch(`http://localhost:8080/api/hotels/${id}`)
 
-  
+
+  const {dates , options } = useContext(SearchContext)
+  console.log("🚀 ~ Hotel ~ dates:", dates ,options)
+
+  const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
+  function dayDifference(date1, date2) {
+    const timeDiff = Math.abs(date2.getTime() - date1.getTime());
+   
+    const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
+    return diffDays;
+  }
+  const days = dayDifference(dates[0].endDate , dates[0].startDate)
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -97,13 +109,13 @@ const Hotel = () => {
               </p>
             </div>
             <div className="w-1/4 bg-[#ebf3ff] flex p-5 flex-col gap-5">
-              <h1 className="text-[18px] text-[#555] font-bold">Perfect for a {days}-night stay!</h1>
+              <h1 className="text-[18px] text-[#555] font-bold">Perfect for a - {days} night stay!</h1>
               <span className="text-[14px]">
                 Located in the real heart of Krakow, this property has an
                 excellent location score of 9.8!
               </span>
               <h2 className="font-light">
-                <b className="text-xl">${days * data.cheapestPrice * options.room}</b> ({days}{" "} nights)
+                <b className="text-xl">${days * data.cheapestPrice * options.room }</b> ({days}{" "} nights)
               </h2>
               <button className="bg-[#0071c2] font-bold text-white border-none px-3 py-2 rounded">Reserve or Book Now!</button>
             </div>
