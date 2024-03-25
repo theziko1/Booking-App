@@ -71,8 +71,8 @@ const Header = ({type}) => {
             <p className="mx-0 my-5">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae eum hic quod laudantium, tenetur dolore at.</p>
             <button className="bg-[#0071c2] text-white font-medium p-2 cursor-pointer">Sign in / Register</button>
             <div className="h-[50px] bg-white border-4 border-yellow-300 flex items-center justify-around -bottom-5 absolute py-3 px-0 rounded w-full max-w-[1024px]">
-                <div className="text-gray-300 flex items-center gap-2">
-                <FaBed className="inline"/>
+                <div className="text-black flex items-center gap-2">
+                <FaBed className="inline text-gray-300"/>
                 <input type="text" placeholder="Where are you going ?" onChange={(e) => setDestination(e.target.value)} className="border-none outline-none"/>
                 </div>
                 <div className="text-gray-300 flex items-center gap-2">
