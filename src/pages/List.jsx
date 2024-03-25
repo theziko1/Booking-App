@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom'
 import { format } from "date-fns"
 import { DateRange } from 'react-date-range'
 import SearchItem from '../components/SearchItem'
+import useFetch from '../hooks/useFetch'
 
 const List = () => {
   const location = useLocation()
@@ -12,8 +13,14 @@ const List = () => {
   const [date, setDate] = useState(location.state.date);
   const [openDate, setOpenDate] = useState(false);
   const [options, setOptions] = useState(location.state.opt);
+  const [min, setMin] = useState(undefined);
+  const [max, setMax] = useState(undefined);
 
+  const {data,loading,error,reFetch} = useFetch(`http://localhost:8080/api/hotels?city=${destination}&min=${min || 0 }&max=${max || 999}`)
 
+  const handleClick = () => {
+    reFetch();
+  };
   return (
     <>
     <Navbar/>
@@ -42,11 +49,11 @@ const List = () => {
             <div className="p-2">
               <div className="flex justify-between text-xs text-[#555] mb-5">
                <span>Min price <small>Per night</small></span>
-               <input type="number" className="w-12"/>
+               <input type="number" onChange={e=>setMin(e.target.value)}  className="w-12"/>
               </div>
               <div className="flex justify-between text-xs text-[#555] mb-5">
                <span>Max price <small>Per night</small></span>
-               <input type="number" className="w-12"/>
+               <input type="number" onChange={e=>setMax(e.target.value)}  className="w-12"/>
               </div>
               <div className="flex justify-between text-xs text-[#555] mb-5">
                <span>Adult</span>
@@ -63,21 +70,15 @@ const List = () => {
             </div> 
 
           </div>
-          <button className="bg-[#0071c2] text-white p-2 w-full rounded-md border-none cursor-pointer font-medium">Search</button>
+          <button onClick={handleClick} className="bg-[#0071c2] text-white p-2 w-full rounded-md border-none cursor-pointer font-medium">Search</button>
         </div>
         <div className="w-3/4">
-          <SearchItem/>
-          <SearchItem/>
-          <SearchItem/>
-          <SearchItem/>
-          <SearchItem/>
-          <SearchItem/>
-          <SearchItem/>
-          <SearchItem/>
-          <SearchItem/>
-          <SearchItem/>
-          <SearchItem/>
-          <SearchItem/>
+          {loading ? "loading ..." : <>
+            {data.map((item) => (
+              <SearchItem item={item} key={item._id} />
+            ))}
+          </>}
+         
         </div>
       </div>
      </div>
