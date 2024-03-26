@@ -31,7 +31,7 @@ const List = () => {
           <h1 className="text-2xl font-bold text-gray-500 mb-2">Search</h1>
           <div className="flex flex-col mb-5 gap-1">
             <label className="text-xs" htmlFor="">Destination</label>
-            <input className="h-7 border-none p-2" type="text" placeholder={destination} />
+            <input className="h-7 border-none p-2" type="text" placeholder={destination} onChange={(e)=> setDestination(e.target.value)} />
           </div>
           <div className="flex flex-col mb-5 gap-1">
             <label  className="text-xs" htmlFor="">Check-in Date</label>
