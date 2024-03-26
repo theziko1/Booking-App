@@ -5,8 +5,10 @@ import { FaCircleArrowLeft, FaCircleArrowRight, FaCircleXmark, FaLocationDot } f
 import MailList from '../components/MailList'
 import Footer from '../components/Footer'
 import useFetch from '../hooks/useFetch';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { SearchContext } from '../context/SearchContext.jsx';
+import { AuthContext } from '../context/AuthContext.jsx';
+import Reserve from '../components/Reserve.jsx';
 
 
 const Hotel = () => {
@@ -17,12 +19,16 @@ const Hotel = () => {
   
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   const {data,loading,error,reFetch} = useFetch(`http://localhost:8080/api/hotels/${id}`)
 
 
+  const { user } = useContext(AuthContext)
+  const navigate = useNavigate()
+
+
   const {dates , options } = useContext(SearchContext)
-  console.log("🚀 ~ Hotel ~ dates:", dates ,options)
 
   const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
   function dayDifference(date1, date2) {
@@ -50,6 +56,13 @@ const Hotel = () => {
     setSlideNumber(newSlideNumber)
   };
 
+  const handleClick = () => {
+    if (user) {
+      setOpenModal(true);
+    } else {
+      navigate("/login");
+    }
+  }
 
   return (
     <>
@@ -117,7 +130,7 @@ const Hotel = () => {
               <h2 className="font-light">
                 <b className="text-xl">${days * data.cheapestPrice * options.room }</b> ({days}{" "} nights)
               </h2>
-              <button className="bg-[#0071c2] font-bold text-white border-none px-3 py-2 rounded">Reserve or Book Now!</button>
+              <button onClick={handleClick} className="bg-[#0071c2] font-bold text-white border-none px-3 py-2 rounded">Reserve or Book Now!</button>
             </div>
           </div>
           </div>
@@ -125,6 +138,7 @@ const Hotel = () => {
           <Footer />
       </div> 
       </>)}
+      {openModal && <Reserve setOpen={setOpenModal} hotelId={id}/>}
     </>
   )
 }
