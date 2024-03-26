@@ -9,8 +9,11 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import { format } from "date-fns"
 import { useNavigate } from 'react-router-dom';
 import { SearchContext } from '../context/SearchContext.jsx';
+import { AuthContext } from '../context/AuthContext.jsx';
 
 const Header = ({type}) => {
+  const { user } = useContext(AuthContext);
+
     const [destination, setDestination] = useState("");
     const [open , setOpen] = useState(false)
     const [dates, setDates] = useState([
@@ -73,7 +76,7 @@ const Header = ({type}) => {
             { type !== "list" &&
               <><h1 className="font-bold text-3xl">Lorem ipsum dolor sit amet consectetur adipisicing elit.</h1>
             <p className="mx-0 my-5">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae eum hic quod laudantium, tenetur dolore at.</p>
-            <button className="bg-[#0071c2] text-white font-medium p-2 cursor-pointer">Sign in / Register</button>
+            {!user && <button className="bg-[#0071c2] text-white font-medium p-2 cursor-pointer">Sign in / Register</button>}
             <div className="h-[50px] bg-white border-4 border-yellow-300 flex items-center justify-around -bottom-5 absolute py-3 px-0 rounded w-full max-w-[1024px]">
                 <div className="text-black flex items-center gap-2">
                 <FaBed className="inline text-gray-300"/>
