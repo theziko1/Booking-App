@@ -2,9 +2,14 @@ import { createError } from "../middleware/error.js";
 import User from "../models/User.js"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import { validateUser } from "../middleware/validate.js";
 
 export const register = async(req,res,next) => {
   try {
+    const valid = validateUser(req.body)
+    if (valid.error) {
+      return res.status(401).json({success : false ,error : valid.error.message})
+    }
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(req.body.password, salt);
     const newUser = new User({
