@@ -1,9 +1,14 @@
+import { validateHotel } from "../middleware/validate.js"
 import Hotel from "../models/Hotel.js"
 import Room from "../models/Room.js"
 
 
 // Create a hotel
 export const AddHotel = async (req,res) => {
+    const valid = validateHotel(req.body)
+    if (valid.error) {
+      return res.status(401).json({success : false ,error : valid.error.message})
+    }
     const newHotel = new Hotel(req.body)
     try {
         const savedHotel = await newHotel.save()
